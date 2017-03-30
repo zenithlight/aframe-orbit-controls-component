@@ -93,6 +93,7 @@ AFRAME.registerComponent('orbit-controls', {
         this.EPS = 0.000001;
 
         this.spherical = new THREE.Spherical();
+
         this.sphericalDelta = new THREE.Spherical();
 
         this.scale = 1.0;
@@ -127,6 +128,8 @@ AFRAME.registerComponent('orbit-controls', {
         };
 
         this.bindMethods();
+
+        this.firstFrame = true;
     },
 
     /**
@@ -784,6 +787,11 @@ AFRAME.registerComponent('orbit-controls', {
 
 		offset.applyQuaternion( quat ); // rotate offset to "y-axis-is-up" space
 		this.spherical.setFromVector3( offset ); // angle from z-axis around y-axis
+
+        if (this.firstFrame) {
+            this.spherical.phi = Math.PI / 2;
+            this.firstFrame = false;
+        }
 
 		if ( this.data.autoRotate && this.state === this.STATE.NONE ) this.rotateLeft( this.getAutoRotationAngle() );
 
